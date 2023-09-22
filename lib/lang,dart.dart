@@ -1,5 +1,6 @@
 import 'package:back/locat.dart';
 import 'package:flutter/material.dart';
+import 'package:back/login.dart';
 
 class LanguageSelectorPage extends StatefulWidget {
   @override
@@ -58,9 +59,9 @@ class _LanguageSelectorPageState extends State<LanguageSelectorPage> {
             // TextButton with text "Let's Get Started" and forward arrow
             TextButton(
               onPressed: () {
-                Navigator.pop(
+                Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BusFinderPage()),
+                  MaterialPageRoute(builder: (context) => Loginpage()),
                 );
               },
               style: TextButton.styleFrom(
@@ -77,10 +78,10 @@ class _LanguageSelectorPageState extends State<LanguageSelectorPage> {
                 mainAxisSize: MainAxisSize.min, // Ensure minimal width
                 children: [
                   Text(
-                    "Let's Get Started",
+                    "Let's Get Started   >",
                     style: TextStyle(fontSize: 25), // Increase font size
                   ),
-                  Icon(Icons.arrow_forward),
+
                 ],
               ),
             ),
@@ -115,7 +116,7 @@ class _LanguageSelectorPageState extends State<LanguageSelectorPage> {
               language,
               style: TextStyle(fontSize: 25), // Increase font size
             ),
-            if (isSelected) Icon(Icons.check, color: Colors.white), // Checkmark icon
+            if (isSelected) Text('✔'), // Checkmark icon
           ],
         ),
       ),

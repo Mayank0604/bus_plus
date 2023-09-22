@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => LanguageSelectorPage()),
                   );
                 },
-                child: const Icon(Icons.arrow_forward_ios_outlined),
+                child: const Text('>'),
               )
             ],
           ),

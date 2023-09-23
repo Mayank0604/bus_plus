@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:back/busname.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -12,9 +13,9 @@ class BusStopsPage extends StatefulWidget {
 }
 
 class _BusStopsPageState extends State<BusStopsPage> {
-  String selectedFromBusStop = 'Shimla Bus Stop'; // Set an initial value
-  String selectedToBusStop = 'Shimla Bus Stop'; // Set an initial value
-  List<String> busStops = [
+  String selectedFromBusStop = ''; // Set a default value
+  String selectedToBusStop = ''; // Set a default value
+  List<String> busStopsHimachalPradesh = [
     'Shimla Bus Stop',
     'Manali Bus Stop',
     'Dharamshala Bus Stop',
@@ -29,81 +30,170 @@ class _BusStopsPageState extends State<BusStopsPage> {
       appBar: AppBar(
         title: Text('Select Bus Stops'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'From Bus Stop:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            DropdownButton<String>(
-              value: selectedFromBusStop,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedFromBusStop = newValue!;
-                });
-              },
-              items: busStops.map((busStop) {
-                return DropdownMenuItem<String>(
-                  value: busStop,
-                  child: Text(busStop),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 16.0),
-
-            Text(
-              'To Bus Stop:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            DropdownButton<String>(
-              value: selectedToBusStop,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedToBusStop = newValue!;
-                });
-              },
-              items: busStops.map((busStop) {
-                return DropdownMenuItem<String>(
-                  value: busStop,
-                  child: Text(busStop),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 32.0),
-
-            ElevatedButton(
-              onPressed: () {
-                // Handle the "Find Bus" button action here
-                if (selectedFromBusStop != 'Shimla Bus Stop' && selectedToBusStop != 'Shimla Bus Stop') {
-                  print('Finding bus from $selectedFromBusStop to $selectedToBusStop');
-                  // Add your logic to find the bus based on selected bus stops
-                } else {
-                  // Show an error message if either bus stop is not selected
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Error'),
-                        content: Text('Please select both "From" and "To" bus stops.'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('OK'),
-                          ),
-                        ],
-                      );
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.white, Color(0xFF1E786E)], // Customize the gradient colors
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start, // Align children to the top
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(bottom: 16.0), // Add margin at the bottom for spacing
+                child: Align(
+                  alignment: Alignment.center, // Center the text within the column
+                  child: Text(
+                    'From Bus Stop:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 26.0, // Increase font size
+                    ),
+                  ),
+                ),
+              ),
+              Autocomplete<String>(
+                optionsBuilder: (TextEditingValue textEditingValue) {
+                  return busStopsHimachalPradesh.where((busStop) {
+                    return busStop.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                  });
+                },
+                onSelected: (String selected) {
+                  setState(() {
+                    selectedFromBusStop = selected;
+                  });
+                },
+                fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
+                  textEditingController.text = selectedFromBusStop;
+                  return TextFormField(
+                    controller: textEditingController,
+                    focusNode: focusNode,
+                    onFieldSubmitted: (String value) {
+                      onFieldSubmitted();
                     },
                   );
-                }
-              },
-              child: Text('Find Bus'),
-            ),
-          ],
+                },
+                optionsViewBuilder: (BuildContext context, AutocompleteOnSelected<String> onSelected, Iterable<String> options) {
+                  return Align(
+                    alignment: Alignment.topLeft,
+                    child: Material(
+                      elevation: 4.0,
+                      child: SizedBox(
+                        height: 200.0,
+                        child: ListView(
+                          padding: EdgeInsets.all(16.0),
+                          children: options.map((String option) {
+                            return ListTile(
+                              title: Text(option),
+                              onTap: () {
+                                onSelected(option);
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 32.0),
+              Container(
+                margin: EdgeInsets.only(bottom: 16.0), // Add margin at the bottom for spacing
+                child: Align(
+                  alignment: Alignment.center, // Center the text within the column
+                  child: Text(
+                    'To Bus Stop:',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 26.0, // Increase font size
+                    ),
+                  ),
+                ),
+              ),
+              Autocomplete<String>(
+                optionsBuilder: (TextEditingValue textEditingValue) {
+                  return busStopsHimachalPradesh.where((busStop) {
+                    return busStop.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                  });
+                },
+                onSelected: (String selected) {
+                  setState(() {
+                    selectedToBusStop = selected;
+                  });
+                },
+                fieldViewBuilder: (BuildContext context, TextEditingController textEditingController, FocusNode focusNode, VoidCallback onFieldSubmitted) {
+                  textEditingController.text = selectedToBusStop;
+                  return TextFormField(
+                    controller: textEditingController,
+                    focusNode: focusNode,
+                    onFieldSubmitted: (String value) {
+                      onFieldSubmitted();
+                    },
+                  );
+                },
+                optionsViewBuilder: (BuildContext context, AutocompleteOnSelected<String> onSelected, Iterable<String> options) {
+                  return Align(
+                    alignment: Alignment.topLeft,
+                    child: Material(
+                      elevation: 4.0,
+                      child: SizedBox(
+                        height: 200.0,
+                        child: ListView(
+                          padding: EdgeInsets.all(16.0),
+                          children: options.map((String option) {
+                            return ListTile(
+                              title: Text(option),
+                              onTap: () {
+                                onSelected(option);
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              SizedBox(height: 32.0),
+              ElevatedButton(
+                onPressed: () {
+                  // Handle the "Find Bus" button action here
+                  if (selectedFromBusStop.isNotEmpty && selectedToBusStop.isNotEmpty) {
+                    print('Finding bus from $selectedFromBusStop to $selectedToBusStop');
+                    // Add your logic to find the bus based on selected bus stops
+                  } else {
+                    // Show an error message if either bus stop is not selected
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Error'),
+                          content: Text('Please select both "From" and "To" bus stops.'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => BusListApp()),
+                                );
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
+                child: Text('Find Bus'),
+              ),
+            ],
+          ),
         ),
       ),
     );

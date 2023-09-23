@@ -56,11 +56,11 @@ class MyApp extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 24,
                     fontFamily: 'Ouutfit',
-                    fontStyle: FontStyle.italic,
+                    fontWeight:   FontWeight.bold,
                   ),
                 ),
               ),
-              Spacer(flex: 45),
+              Spacer(flex: 40),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -69,6 +69,7 @@ class MyApp extends StatelessWidget {
                   );
                 },
                 child: const Text('>'),
+
               )
             ],
           ),
